@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="剪枝">
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3AA672"/>
+      <stop offset="1" stop-color="#0B3A28"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="17" fill="url(#tile)"/>
+  <g stroke="#8FD9B0" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.5">
+    <path d="M11 18v-7h7"/>
+    <path d="M53 18v-7h-7"/>
+    <path d="M11 46v7h7"/>
+    <path d="M53 46v7h-7"/>
+  </g>
+  <path d="M32 10C18 20 16 41 32 54" fill="none" stroke="#F4F7F1" stroke-width="3.4" stroke-linecap="round"/>
+  <path d="M32 10l7 3v4l6 3v7l4 3v9l-4 3v6l-6 3L32 54" fill="none" stroke="#F4F7F1" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M32 13.5v37" stroke="#A9E7C2" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M25 57.5l7-2 7 2" fill="none" stroke="#8FD9B0" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
