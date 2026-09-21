@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>剪枝 · 只做文字检查</title>
+<meta name="description" content="剪枝：检索文学史中的同类风格，检查同人文正文里可能让读者疲劳的高频词。只做文字检查，不替代写作。">
+<link id="favicon" rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<svg class="sprite" aria-hidden="true" focusable="false" width="0" height="0">
+  <symbol id="i-logo" viewBox="0 0 64 64">
+    <defs>
+      <linearGradient id="tileGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#3AA672"/>
+        <stop offset="1" stop-color="#0B3A28"/>
+      </linearGradient>
+    </defs>
+    <rect x="2" y="2" width="60" height="60" rx="17" fill="url(#tileGrad)"/>
+    <g stroke="#8FD9B0" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.5">
+      <path d="M11 18v-7h7"/><path d="M53 18v-7h-7"/><path d="M11 46v7h7"/><path d="M53 46v7h-7"/>
+    </g>
+    <path d="M32 10C18 20 16 41 32 54" fill="none" stroke="#F4F7F1" stroke-width="3.4" stroke-linecap="round"/>
+    <path d="M32 10l7 3v4l6 3v7l4 3v9l-4 3v6l-6 3L32 54" fill="none" stroke="#F4F7F1" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M32 13.5v37" stroke="#A9E7C2" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M25 57.5l7-2 7 2" fill="none" stroke="#8FD9B0" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+
+  <symbol id="i-cactus" viewBox="0 0 120 120">
+    <ellipse cx="60" cy="109" rx="29" ry="5" fill="#CFE9D9"/>
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M46 63H34V49" stroke="#1E7B54" stroke-width="15"/>
+      <path d="M46 63H34V49" stroke="#9ADCB8" stroke-width="10.5"/>
+      <path d="M74 57H86V43" stroke="#1E7B54" stroke-width="15"/>
+      <path d="M74 57H86V43" stroke="#9ADCB8" stroke-width="10.5"/>
+    </g>
+    <path d="M43 80h34l-3.4 22.2c-.4 2.6-2.7 4.6-5.4 4.6H51.8c-2.7 0-5-2-5.4-4.6z" fill="#D6F0E0" stroke="#1E7B54" stroke-width="2.6" stroke-linejoin="round"/>
+    <rect x="39.5" y="75.5" width="41" height="9.5" rx="4.8" fill="#BEE6CE" stroke="#1E7B54" stroke-width="2.6"/>
+    <rect x="46" y="25" width="28" height="56" rx="14" fill="#7FC9A1" stroke="#1E7B54" stroke-width="2.6"/>
+    <g stroke="#1E7B54" stroke-width="2" stroke-linecap="round" opacity="0.75">
+      <path d="M55 31l-2.6-4M65 31l2.6-4M60 26.5v-4M68.5 40l4-2.4M51.5 40l-4-2.4M60 72v-4"/>
+    </g>
+    <ellipse cx="49.6" cy="58.6" rx="4.4" ry="2.8" fill="#FFD3D8" opacity="0.9"/>
+    <ellipse cx="70.4" cy="58.6" rx="4.4" ry="2.8" fill="#FFD3D8" opacity="0.9"/>
+    <path d="M56.4 57c1.3 2.5 5.9 2.6 7.2 0" stroke="#14603F" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+    <g>
+      <circle cx="60" cy="11.6" r="4" fill="#F0C2CE"/>
+      <circle cx="64.4" cy="15" r="3.8" fill="#EFBFD0"/>
+      <circle cx="62.9" cy="20.2" r="3.8" fill="#EFBFD0"/>
+      <circle cx="57.1" cy="20.2" r="3.8" fill="#EFBFD0"/>
+      <circle cx="55.6" cy="15" r="3.8" fill="#EFBFD0"/>
+      <circle cx="60" cy="16" r="3.4" fill="#FFE08A"/>
+    </g>
+  </symbol>
+
+  <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/>
+  </symbol>
+  <symbol id="i-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 19V6"/><path d="M6 12l6-6 6 6"/>
+  </symbol>
+</svg>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#i-logo"/></svg>
+      <div class="brand-text">
+        <h1>剪枝</h1>
+        <p>让灵感像植物一样生生不息</p>
+      </div>
+    </div>
+
+    <div class="mascot-card">
+      <svg class="mascot" viewBox="0 0 120 120" aria-hidden="true"><use href="#i-cactus"/></svg>
+      <div class="mascot-text">
+        <b>仙人掌小剪</b>
+        <p>只检查，不代写。<br>你的字，一个字都不动。</p>
+      </div>
+    </div>
+
+    <div class="history-head">
+      <span>输入历史<span class="hh-sub">时间 · 由晚到早</span></span>
+      <button id="clearHistory" class="btn tiny ghost" type="button">清空</button>
+    </div>
+    <ul id="historyList" class="history"></ul>
+
+    <div class="side-foot"><i class="dot"></i>全部计算在本机完成，文本不外传</div>
+  </aside>
+
+  <main class="main">
+    <section class="panel top">
+      <div class="panel-head">
+        <div class="ph-left">
+          <h2>风格检索 <span class="beta-tag">功能测试中</span></h2>
+          <p id="introBlock">选一片叶子，写下你此刻想到的词句（这四个模块还在测试，下面的正文检查是主力功能）。</p>
+        </div>
+        <div class="ph-right">
+          <button id="helpBtn" class="btn tiny ghost" type="button">使用说明</button>
+          <button id="settingsBtn" class="btn tiny ghost" type="button">设置</button>
+        </div>
+      </div>
+      <div class="top-body">
+        <div id="genreGrid" class="genre-grid"></div>
+
+        <div id="searchView" class="search-view" hidden>
+          <div class="search-bar">
+            <button id="backToCards" class="btn tiny ghost" type="button">← 四类</button>
+            <div id="genreTabs" class="genre-tabs"></div>
+            <input id="queryInput" type="text" maxlength="800" autocomplete="off"
+                   placeholder="写下你想到的词或句子，例如：雪夜 蝉鸣 旧信 不肯说出口的告别">
+            <button id="zoomBtn" class="btn tiny ghost" type="button" title="把上半区放大，方便看结果">放大检索区</button>
+            <button id="searchBtn" class="btn primary" type="button">检索</button>
+          </div>
+          <div id="searchPlaceholder" class="search-tip"></div>
+          <div id="results" class="results"></div>
+          <button id="refreshBtn" class="refresh-btn" type="button" title="换一组结果">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-refresh"/></svg>
+            <span>换一换</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel bottom">
+      <div class="panel-head small">
+        <div class="btabs">
+          <button class="btab on" data-view="edit" type="button">编辑正文</button>
+          <button class="btab" data-view="render" type="button">高亮检查</button>
+        </div>
+        <div class="ph-right">
+          <span id="charCount" class="count">0 / 20,000</span>
+          <span class="note">单次粘贴上限 20,000 字符 · Enter 检查，Shift+Enter 换行 · 超限整段取消，绝不删改你的字</span>
+        </div>
+      </div>
+      <div class="bottom-body">
+        <div class="editor-wrap">
+          <div id="staleWarn" class="stale" hidden>正文已修改，点右下角 ↑ 重新检查</div>
+          <textarea id="docInput" spellcheck="false"
+            placeholder="把要检查的同人文正文粘贴到这里（单次 20,000 字符以内），写完直接按 Enter 检查。&#10;&#10;剪枝只盯一件事：你会不会读腻。它标出反复出现的常态化表述（皱了皱眉、垂下眼眸…）与越过线的高频实词；不标雪、月、夜色这类关键意象，不标人名昵称与你、我、他，也不标的、地、得、了。&#10;&#10;需要在框里自己分段，用 Shift+Enter 换行。"></textarea>
+          <div id="docRender" class="doc-render" hidden></div>
+          <button id="clearDoc" class="clear-btn" type="button" title="清空文本框">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h12M9.5 7V5.6c0-.6.5-1.1 1.1-1.1h2.8c.6 0 1.1.5 1.1 1.1V7M8.2 7l.7 11.2c0 .7.6 1.3 1.3 1.3h3.6c.7 0 1.3-.6 1.3-1.3L15.8 7"/></svg>
+            <span>清空</span>
+          </button>
+          <button id="sendBtn" class="send-btn" type="button" title="检查正文（Enter）">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-up"/></svg>
+          </button>
+        </div>
+        <aside id="analysis" class="analysis" hidden></aside>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="introModal" class="modal-mask" hidden>
+  <div class="modal intro">
+    <div class="modal-mascot"><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#i-cactus"/></svg></div>
+    <div id="introBody" class="intro-body"></div>
+    <div class="intro-foot">
+      <div id="introDots" class="dots"></div>
+      <div class="intro-actions">
+        <button id="introSkip" class="btn ghost" type="button">先跳过</button>
+        <button id="introNext" class="btn primary" type="button">下一步</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="settingsModal" class="modal-mask" hidden>
+  <div class="modal settings">
+    <div class="modal-head">
+      <h3>设置</h3>
+      <button id="settingsClose" class="btn tiny ghost" type="button">关闭</button>
+    </div>
+    <div class="set-row switch">
+      <div>
+        <b>替换建议</b>
+        <p>开启后，正文里用浅绿色标出可替换的词；鼠标停留 <b>0.618 秒</b> 会浮出几个方向不同的替换词。<b>默认关闭。</b>即使开启，也只有你亲手点下某一个词，那一处才会改变，并且随时可以撤销或还原原文。</p>
+      </div>
+      <label class="sw"><input type="checkbox" id="setSuggest"><span></span></label>
+    </div>
+    <div class="set-row">
+      <div><b>疲劳阈值灵敏度</b><p>宽松：少打扰。严格：更早发现重复。</p></div>
+      <div class="seg">
+        <button class="seg-btn" data-v="low" type="button">宽松</button>
+        <button class="seg-btn on" data-v="mid" type="button">标准</button>
+        <button class="seg-btn" data-v="high" type="button">严格</button>
+      </div>
+    </div>
+    <div class="set-row switch">
+      <div><b>过滤人名与昵称</b><p>姓名、昵称都不计入统计，也不参与标记。</p></div>
+      <label class="sw"><input type="checkbox" id="setNames"><span></span></label>
+    </div>
+    <div class="set-row">
+      <div><b>不标记的三类东西</b><p>① 本文关键意象（雪、月、夜色、灯光…，短段落内密集出现也是风格）；② 人名、昵称、你 / 我 / 他 / 她这类称呼与代词；③ 的、地、得、了、吗、呢这类虚词。这三类固定不参与标记。</p></div>
+      <div class="fixed-val">固定</div>
+    </div>
+    <div class="set-row">
+      <div><b>悬浮浮现延迟</b><p>按设计固定为 0.618 秒（黄金比例）。</p></div>
+      <div class="fixed-val">0.618s</div>
+    </div>
+    <div class="set-row switch">
+      <div>
+        <b>联网扩词（可选）</b>
+        <p>打开后，点「检索」时会先把你输入的词发给 AI，让它扩成具体的意象词与场景词（例如「雪夜」→ 霜、柴门犬吠、归人、行路），<b>然后仍然在本地句库里检索</b>。
+          <b>只发送你输入的那几个关键词，不发送正文</b>，正文检查永远在本机完成。不开这个开关时，网页不联网。</p>
+      </div>
+      <label class="sw"><input type="checkbox" id="setAI"><span></span></label>
+    </div>
+    <div class="set-row ai-fields">
+      <div class="ai-grid">
+        <label>接口地址<input id="aiBase" type="text" placeholder="https://api.openai.com/v1" autocomplete="off"></label>
+        <label>模型名<input id="aiModel" type="text" placeholder="gpt-4o-mini" autocomplete="off"></label>
+        <label class="wide">API Key<input id="aiKey" type="password" placeholder="sk-…（只存在本机浏览器，不会上传）" autocomplete="off"></label>
+      </div>
+      <p class="ana-note">兼容 OpenAI 格式的接口都行（OpenAI、DeepSeek、智谱、Moonshot、硅基流动……）。Key 只保存在本机 localStorage；这个 HTML 文件如果发给别人，请先清空 Key。</p>
+    </div>
+    <div class="set-row">
+      <div><b>关于「剪枝」</b><p>它只做文字检查：找重复、标位置、给方向。它不生成段落、不续写情节、不替你决定故事怎么走。</p></div>
+    </div>
+    <div class="modal-foot">
+      <button id="resetSettings" class="btn ghost" type="button">恢复默认</button>
+      <span>历史记录保存在本机浏览器，可随时清空。</span>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  var sym = document.getElementById("i-logo");
+  var link = document.getElementById("favicon");
+  if (!sym || !link) return;
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">' + sym.innerHTML + "</svg>";
+  link.href = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+})();
+</script>
+</body>
+</html>
